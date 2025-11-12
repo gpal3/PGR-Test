@@ -1,0 +1,33 @@
+app:
+  name: "AI Negotiation Framework"
+  version: "0.1.0"
+  environment: "development"
+  log_config: "config/logging.yaml"
+model:
+  llm_model_name: "google/flan-t5-small"
+  llm_fallback_model_name: "hf-internal-testing/tiny-random-t5"
+  max_new_tokens: 128
+  temperature: 0.7
+rl:
+  dqn:
+    gamma: 0.95
+    epsilon_start: 1.0
+    epsilon_end: 0.05
+    epsilon_decay: 0.995
+  policy_gradient:
+    lr: 0.01
+    temperature: 1.0
+market:
+  forecast_horizon_days: 30
+  commodity_price_column: "price_usd"
+  fx_rate_column: "rate"
+data:
+  sqlite_path: "data/demo.db"
+  feature_store_schema: "feature_store"
+  transcripts_path: "data/historical_negotiations/transcripts.jsonl"
+ui:
+  api_url: "http://localhost:8000"
+governance:
+  enable_red_team_checks: true
+  redact_pii: true
+  drift_threshold: 0.2

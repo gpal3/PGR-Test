@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  api:
+    build: .
+    container_name: ai-negotiation-api
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - UI_PORT=8501
+      - DB_URL=sqlite:///./data/demo.db
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: poetry run uvicorn src.app.main:app --host 0.0.0.0 --port 8000
+
+  ui:
+    build: .
+    container_name: ai-negotiation-ui
+    depends_on:
+      - api
+    environment:
+      - API_HOST=api
+      - API_PORT=8000
+      - UI_PORT=8501
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    command: poetry run streamlit run src/ui/streamlit_app.py --server.port 8501 --server.address 0.0.0.0

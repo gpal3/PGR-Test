@@ -1,0 +1,2 @@
+{"session_id": "neg-001", "buyer": "A&A Corp", "supplier": "EcoThreads", "messages": [{"role": "buyer", "content": "Can you improve lead time?"}, {"role": "supplier", "content": "We can cut by 5 days if MOQ increases."}], "outcome": "counter_accepted"}
+{"session_id": "neg-002", "buyer": "A&A Corp", "supplier": "SustainTex", "messages": [{"role": "buyer", "content": "Need cost reduction on lining."}, {"role": "supplier", "content": "Offer 3% discount if payment in 15 days."}], "outcome": "pending_approval"}

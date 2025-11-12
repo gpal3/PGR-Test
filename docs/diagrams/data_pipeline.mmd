@@ -1,0 +1,12 @@
+sequenceDiagram
+participant S as Supplier
+participant API as FastAPI
+participant NER as NER Service
+participant RL as RL Engine
+participant UI as Buyer UI
+S->>API: Upload BOM
+API->>NER: Parse + Extract Entities
+NER-->>API: Structured BOM JSON
+API->>RL: Context + State
+RL-->>API: Action + Rationale + SHAP
+API-->>UI: Negotiation Update
