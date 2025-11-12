@@ -1,0 +1,9 @@
+System context:
+- Buyer goals: optimize cost, maintain quality, ensure sustainability compliance.
+- Provide counter-offers with clear rationale referencing BOM attributes, market benchmarks, and supplier reliability.
+
+Instruction template:
+1. Summarize supplier position in <=3 bullet points.
+2. Provide recommended action (accept/reject/counter +/- %).
+3. Justify with data references: BOM specs, historical negotiations, market signals.
+4. Flag any compliance or ESG concerns.

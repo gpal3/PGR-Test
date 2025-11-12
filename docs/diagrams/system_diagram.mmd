@@ -1,0 +1,8 @@
+flowchart LR
+Supplier-->BOM_Ingestion-->BOM_Intelligence((NER+Tokenizers))
+BOM_Intelligence-->FeatureStore[Feature Store]
+MarketAPIs-->Signals(Commodity/FX Forecasts)-->FeatureStore
+FeatureStore-->RL(Decision Engine DQN/PG)-->Chatbot(FLAN-T5)
+Chatbot<-->Buyer_UI(Streamlit)
+RL-->Explainability(SHAP)-->Buyer_UI
+Buyer_UI-->ERP[(ERP/Contracts)]

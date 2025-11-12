@@ -1,0 +1,185 @@
+openapi: 3.1.0
+info:
+  title: AI Negotiation Framework API
+  version: 0.1.0
+  description: |
+    Endpoints for BOM parsing, market signals, and negotiation workflows.
+servers:
+  - url: http://localhost:8000
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+  /v1/bom/parse:
+    post:
+      summary: Parse a Bill of Materials file
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Parsed BOM data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BOMParseResponse'
+  /v1/market/signals:
+    get:
+      summary: Retrieve latest market benchmarks and forecasts
+      responses:
+        '200':
+          description: Market signals payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketSignalsResponse'
+  /v1/negotiation/start:
+    post:
+      summary: Start a negotiation session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NegotiationStartRequest'
+      responses:
+        '200':
+          description: Negotiation session state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NegotiationState'
+  /v1/negotiation/step:
+    post:
+      summary: Continue a negotiation with supplier input
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NegotiationStepRequest'
+      responses:
+        '200':
+          description: Model reply and counter-offer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NegotiationState'
+components:
+  schemas:
+    BOMItem:
+      type: object
+      properties:
+        material:
+          type: string
+        composition:
+          type: string
+        gsm:
+          type: number
+        process:
+          type: string
+        unit_cost:
+          type: number
+        moq:
+          type: integer
+        lead_time:
+          type: integer
+    BOMParseResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BOMItem'
+    MarketSignalsResponse:
+      type: object
+      properties:
+        commodity_trends:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              commodity:
+                type: string
+              price_usd:
+                type: number
+        fx_trends:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              pair:
+                type: string
+              rate:
+                type: number
+        forecast_summary:
+          type: object
+    NegotiationStartRequest:
+      type: object
+      required: [session_id, supplier_id, product_id, targets]
+      properties:
+        session_id:
+          type: string
+        supplier_id:
+          type: string
+        product_id:
+          type: string
+        targets:
+          type: object
+          properties:
+            cost_reduction_pct:
+              type: number
+            lead_time_days:
+              type: integer
+    NegotiationStepRequest:
+      type: object
+      required: [session_id, supplier_message]
+      properties:
+        session_id:
+          type: string
+        supplier_message:
+          type: string
+    NegotiationState:
+      type: object
+      properties:
+        session_id:
+          type: string
+        system_summary:
+          type: string
+        recommended_action:
+          type: string
+        counter_offer:
+          type: object
+          properties:
+            cost_adjustment_pct:
+              type: number
+            lead_time_days:
+              type: integer
+        rationale:
+          type: string
+        shap_values:
+          type: object
